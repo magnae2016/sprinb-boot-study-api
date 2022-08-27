@@ -5,9 +5,11 @@ import com.growth.api.dto.DeveloperDetailDto;
 import com.growth.api.dto.DeveloperDto;
 import com.growth.api.dto.EditDeveloper;
 import com.growth.api.entity.Developer;
+import com.growth.api.entity.RetiredDeveloper;
 import com.growth.api.exception.DMakerErrorCode;
 import com.growth.api.exception.DMakerException;
 import com.growth.api.repository.DeveloperRepository;
+import com.growth.api.repository.RetiredDeveloperRepository;
 import com.growth.api.type.DeveloperLevel;
 import com.growth.api.type.StatusCode;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DMakerService {
     private final DeveloperRepository developerRepository;
+    private final RetiredDeveloperRepository retiredDeveloperRepository;
 
     public List<DeveloperDto> getAllEmployedDevelopers() {
         return developerRepository.findDevelopersByStatusCodeEquals(StatusCode.EMPLOYED).stream().map(DeveloperDto::fromEntity).collect(Collectors.toList());
@@ -79,5 +82,20 @@ public class DMakerService {
         validateDeveloperLevel(request.getDeveloperLevel(),
                 request.getExperienceYears());
         developerRepository.findByMemberId(memberId).orElseThrow(() -> new DMakerException(DMakerErrorCode.NO_DEVELOPER));
+    }
+
+    @Transactional
+    public DeveloperDetailDto deleteDeveloper(String memberId) {
+        Developer developer =
+                developerRepository.findByMemberId(memberId).orElseThrow(() -> new DMakerException(DMakerErrorCode.NO_DEVELOPER));
+        developer.setStatusCode(StatusCode.RETIRED);
+
+        RetiredDeveloper retiredDeveloper = RetiredDeveloper.builder()
+                .memberId(developer.getMemberId())
+                .name(developer.getName())
+                .build();
+
+        retiredDeveloperRepository.save(retiredDeveloper);
+        return DeveloperDetailDto.fromEntity(developer);
     }
 }
