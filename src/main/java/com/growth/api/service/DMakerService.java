@@ -1,6 +1,7 @@
 package com.growth.api.service;
 
 import com.growth.api.dto.CreateDeveloper;
+import com.growth.api.dto.DeveloperDetailDto;
 import com.growth.api.dto.DeveloperDto;
 import com.growth.api.entity.Developer;
 import com.growth.api.exception.DMakerErrorCode;
@@ -49,5 +50,9 @@ public class DMakerService {
                 .build();
         developerRepository.save(developer);
         return CreateDeveloper.Response.fromEntity(developer);
+    }
+
+    public DeveloperDetailDto getDeveloperDetail(String memberId) {
+        return developerRepository.findByMemberId(memberId).map(DeveloperDetailDto::fromEntity).orElseThrow(() -> new DMakerException(DMakerErrorCode.NO_DEVELOPER));
     }
 }

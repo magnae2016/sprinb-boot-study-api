@@ -1,14 +1,12 @@
 package com.growth.api.controller;
 
 import com.growth.api.dto.CreateDeveloper;
+import com.growth.api.dto.DeveloperDetailDto;
 import com.growth.api.dto.DeveloperDto;
 import com.growth.api.service.DMakerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,6 +20,11 @@ public class DMakerController {
     @GetMapping("/developers")
     public List<DeveloperDto> getAllDevelopers() {
         return dMakerService.getAllEmployedDevelopers();
+    }
+
+    @GetMapping("/developers/{memberId}")
+    public DeveloperDetailDto getDeveloperDetail(@PathVariable String memberId) {
+        return dMakerService.getDeveloperDetail(memberId);
     }
 
     @PostMapping("/create-developers")
