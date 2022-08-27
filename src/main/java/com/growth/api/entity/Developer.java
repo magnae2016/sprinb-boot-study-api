@@ -5,7 +5,7 @@ import com.growth.api.type.DeveloperSkill;
 import com.growth.api.type.StatusCode;
 import lombok.*;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,8 +15,14 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 public class Developer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
+
+    @Enumerated(EnumType.STRING)
     private DeveloperLevel developerLevel;
+
+    @Enumerated(EnumType.STRING)
     private DeveloperSkill developerSkill;
 
     private Integer experienceYears;
@@ -24,6 +30,7 @@ public class Developer {
     private String name;
     private Integer age;
 
+    @Enumerated(EnumType.STRING)
     private StatusCode statusCode;
 
     private LocalDateTime createdAt;
