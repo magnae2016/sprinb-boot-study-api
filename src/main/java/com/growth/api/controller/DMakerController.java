@@ -3,6 +3,7 @@ package com.growth.api.controller;
 import com.growth.api.dto.CreateDeveloper;
 import com.growth.api.dto.DeveloperDetailDto;
 import com.growth.api.dto.DeveloperDto;
+import com.growth.api.dto.EditDeveloper;
 import com.growth.api.service.DMakerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,4 +33,11 @@ public class DMakerController {
             @Valid @RequestBody CreateDeveloper.Request request) {
         return dMakerService.createDeveloper(request);
     }
+
+    @PutMapping("/developer/{memberId}")
+    public DeveloperDetailDto editDeveloper(@PathVariable String memberId,
+                                            @Valid @RequestBody EditDeveloper.Request request) {
+        return dMakerService.editDeveloper(memberId, request);
+    }
+
 }
